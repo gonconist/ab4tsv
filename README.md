@@ -15,15 +15,14 @@ First we need to set up the main parameters of training by modifying `scripts/fi
 
 ```shell
 #!/bin/bash
-seed=200
 encoding=swap_fc_plus
 A=def
 B=ctx
 C=cls
 D=hyps
 permute=False
-dir=encoding_results
-python src/finetuning.py -s $seed -e $encoding -a $A $B $C $D -p $permute --path $dir
+outputdir=results
+python src/finetuning.py -e $encoding -a $A $B $C $D -p $permute --path $outputdir
 ```
 #### Hyperparameters
 
@@ -35,8 +34,6 @@ batch_size_train = 16
 batch_size_val = 8
 num_warmup_steps = 0
 ```
-
-
 
 
 ### Run command

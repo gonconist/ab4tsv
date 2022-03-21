@@ -1,7 +1,7 @@
 # AB4TSV
 ### *Analogy and BERT for Target Sense Verification*
 
-AB4TSV is a hybrid architecture that combines BERT with a CNN classifier for tackling Target Sense Verification (TSV). In this repository we provide scripts for traning and evaluating AB4TSV on the WiC-TSV evaluation benchmark.
+AB4TSV is a hybrid architecture that combines BERT with analogies for tackling Target Sense Verification (TSV). In this repository we provide scripts for training and evaluating AB4TSV on the WiC-TSV evaluation benchmark.
 
 ![alt text](https://github.com/gonconist/ab4tsv/blob/main/ab4tsv.png)
 

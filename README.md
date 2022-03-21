@@ -11,6 +11,10 @@ AB4TSV is a hybrid architecture that combines BERT with a CNN classifier for tac
 pip install -r requirements.txt
 ```
 
+## WiC-TSV data & baseline models
+
+The WiC-TSV dataset as well as training and evaluation scripts for HyperBertCLS and HyperBert3 are available [here](https://github.com/semantic-web-company/wic-tsv).
+
 ## Training your own model
 
 There are two equivalent ways to finetune AB4TSV on WiC-TSV.
@@ -52,7 +56,7 @@ python src/train.py \
     --permutation_invariance False
 ```
 
-## Evaluating finetuned model
+## Evaluating your finetuned model
 
 Like training, there are two ways to evaluate the performance of your AB4TSV model.
 *Note that performance results are obtained only on the __development set__ since the test set is private. For test set results submit your predictions at [codalab](https://competitions.codalab.org/competitions/23683).*

@@ -44,7 +44,7 @@ bash ./scripts/train.sh
 ```
 ### Run (1 step)
 
-Alternatively, pass the arguments of interest directly to `src/train.py` like this:
+Alternatively, pass the arguments of interest directly to `src/train.py`:
 ```shell
 python src/train.py \
     --analogy def ctx cls hyps \
@@ -54,6 +54,12 @@ python src/train.py \
 
 ## Evaluating finetuned model
 
+Like training, there are two ways to evaluate the performance of your AB4TSV model.
+*Note that performance results are obtained only on the __development set__ since the test set is private. For test set results submit your predictions at [codalab](https://competitions.codalab.org/competitions/23683).*
+
+### Run (2 steps)
+
+Initialize the training parameters inside `scripts/eval.sh`.
 ```shell
 #!/bin/bash
 
@@ -61,15 +67,29 @@ A=cls
 B=cls
 C=descr				
 D=descr
+dataset=dev                     # -d
 encoding=swap_fc_plus           # -e
 target_fc=$                     # -tfc
 hyps_starting_fc=$              # -hfc1
 hyps_ending_fc=$              	# -hfc2
 permutation_invariance=False    # -pi
-is_test_set=False               # --is_test_set
 save_preds=True                 # --save_preds
 out_binary_preds=False          # --out_binary_preds	
 output_dir=results              # --output_dir
 
-python source/eval.py -a $A $B $C $D -e $encoding -pi $permutation_invariance --is_test_set $is_test_set --save_preds $save_preds --out_binary_preds $out_binary_preds
+python source/eval.py -a $A $B $C $D -d $dataset-e $encoding -pi $permutation_invariance --save_preds $save_preds --out_binary_preds $out_binary_preds
+```
+Then simply run the following command:
+```shell
+bash ./scripts/eval.sh
+```
+
+### Run (1 step)
+Alternatively, pass the arguments of interest directly to `src/eval.py`:
+```shell
+python src/eval.py \
+    --analogy def ctx cls hyps \
+    --encoding swap_fc_plus \
+    --permutation_invariance False
+    --save_preds True
 ```

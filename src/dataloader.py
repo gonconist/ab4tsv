@@ -38,7 +38,7 @@ def str2enum(v):
         return WiCTSVDatasetEncodingOptions.DEFAULT
     elif v.lower() == 'default_fc':
         return WiCTSVDatasetEncodingOptions.DEFAULT_FC
-    elif v.lower() == 'default_fc_em':
+    elif v.lower() == 'default_em':
         return WiCTSVDatasetEncodingOptions.DEFAULT_EM
     elif v.lower() == 'swap':
         return WiCTSVDatasetEncodingOptions.SWAP

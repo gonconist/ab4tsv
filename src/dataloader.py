@@ -17,22 +17,13 @@ class WiCTSVDatasetEncodingOptions(Enum):
     The name of the enum is displayed using ‘name’ keyword.
     Using type() we can check the enum types.
     The __members__ attribute is an ordered mapping of the names of the enums to their respective enum objects.
-
-    <*> The _PLUS extension denotes the inclusion of the representation of '<FC1>', '<FC2>' when averaging hyps
     """
     DEFAULT = '[CLS] context [SEP] definition; hypernyms [SEP]'
-    DEFAULT_FC = '[CLS] context [SEP] definition; <FC1> hypernyms <FC2> [SEP]'
-    DEFAULT_FC_PLUS = '[CLS] context [SEP] definition; <FC1> hypernyms <FC2> [SEP]' \
-                      'but embeddings of <FC1>, <FC2> are included in hyps'
-    DEFAULT_FT_PLUS = '[CLS] context [SEP] definition; [FT] hypernyms [\FT] [SEP]' \
-                      'but embedding of [FT] is used to represent hyps'
-
+    DEFAULT_FC = '[CLS] context [SEP] definition; $ hypernyms $ [SEP]'
+    DEFAULT_EM = '[CLS] context [SEP] definition; [H] hypernyms [\H] [SEP]'
     SWAP = '[CLS] context [SEP] hypenyms; definition [SEP]'
-    SWAP_FC = '[CLS] context [SEP] <FC1> hypernyms <FC2>; definition [SEP]'
-    SWAP_FC_PLUS = '[CLS] context [SEP] <FC1> hypernyms <FC2>; definition [SEP]'\
-                   'but embeddings of <FC1>, <FC2> are included in hyps'
-    SWAP_FT_PLUS = '[CLS] context [SEP] [FT] hypernyms [\FT]; definition [SEP]' \
-                   'but embedding of [FT] is used to represent hyps'
+    SWAP_FC = '[CLS] context [SEP] $ hypernyms $; definition [SEP]'
+    SWAP_EM = '[CLS] context [SEP] [H] hypernyms [\H]; definition [SEP]'
 
 def float_or_None(value):
     try:
@@ -47,18 +38,14 @@ def str2enum(v):
         return WiCTSVDatasetEncodingOptions.DEFAULT
     elif v.lower() == 'default_fc':
         return WiCTSVDatasetEncodingOptions.DEFAULT_FC
-    elif v.lower() == 'default_fc_plus':
-        return WiCTSVDatasetEncodingOptions.DEFAULT_FC_PLUS
-    elif v.lower() == 'default_ft_plus':
-        return WiCTSVDatasetEncodingOptions.DEFAULT_FT_PLUS
+    elif v.lower() == 'default_fc_em':
+        return WiCTSVDatasetEncodingOptions.DEFAULT_EM
     elif v.lower() == 'swap':
         return WiCTSVDatasetEncodingOptions.SWAP
     elif v.lower() == 'swap_fc':
         return WiCTSVDatasetEncodingOptions.SWAP_FC
-    elif v.lower() == 'swap_fc_plus':
-        return WiCTSVDatasetEncodingOptions.SWAP_FC_PLUS
-    elif v.lower() == 'swap_ft_plus':
-        return WiCTSVDatasetEncodingOptions.SWAP_FT_PLUS
+    elif v.lower() == 'swap_em':
+        return WiCTSVDatasetEncodingOptions.SWAP_EM
     else:
         raise argparse.ArgumentTypeError('Wrong value.')
 
@@ -129,23 +116,15 @@ class WiCTSVDataset(torch.utils.data.Dataset):
                 hyps_len = len(hyps_index_list)
                 self.hyps_start_len.append((hyps_start_ind, hyps_len))
 
-            elif encoding_type.name == 'DEFAULT_FC' or encoding_type.name == 'DEFAULT_FC_PLUS' \
-                    or encoding_type.name == 'DEFAULT_FT_PLUS':
+            elif encoding_type.name == 'DEFAULT_FC' or encoding_type.name == 'DEFAULT_EM':
                 sense_identifiers_str = def_ + '; ' + hyps
                 sense_ids_strs.append(sense_identifiers_str)
                 def_start_ind = len(ctx_index_list) + len(['[CLS]', '[SEP]'])
                 def_len = len(def_index_list)
                 self.def_start_len.append((def_start_ind, def_len))
 
-                if encoding_type.name == 'DEFAULT_FC_PLUS' or encoding_type.name == 'DEFAULT_FT_PLUS':
-                    hyps_start_ind = def_start_ind + def_len + len([';'])
-                    if encoding_type.name == 'DEFAULT_FC_PLUS':
-                        hyps_len = len(hyps_index_list)
-                    elif encoding_type.name == 'DEFAULT_FT_PLUS':
-                        hyps_len = len(hyps_index_map[0])
-                elif encoding_type.name == 'DEFAULT_FC':
-                    hyps_start_ind = def_start_ind + len(def_index_list) + len(hyps_index_map[0]) + len([';'])
-                    hyps_len = len(hyps_index_list) - len(hyps_index_map[0]) - len(hyps_index_map[hyps_index_list[-1]])
+                hyps_start_ind = def_start_ind + def_len + len([';'])
+                hyps_len = len(hyps_index_list)
                 self.hyps_start_len.append((hyps_start_ind, hyps_len))
 
             elif encoding_type.name == 'SWAP':
@@ -160,20 +139,12 @@ class WiCTSVDataset(torch.utils.data.Dataset):
                 def_len = len(def_index_list)
                 self.def_start_len.append((def_start_ind, def_len))
 
-            elif encoding_type.name == 'SWAP_FC' or encoding_type.name == 'SWAP_FC_PLUS' \
-                    or encoding_type == 'SWAP_FT_PLUS':
+            elif encoding_type.name == 'SWAP_FC' or encoding_type.name == 'SWAP_EM':
                 sense_identifiers_str = hyps + '; ' + def_
                 sense_ids_strs.append(sense_identifiers_str)
 
-                if encoding_type.name == 'SWAP_FC_PLUS' or encoding_type.name == 'SWAP_FT_PLUS':
-                    hyps_start_ind = len(ctx_index_list) + len(['[CLS]', '[SEP]'])
-                    if encoding_type.name == 'SWAP_FC_PLUS':
-                        hyps_len = len(hyps_index_list)
-                    elif encoding_type.name == 'SWAP_FT_PLUS':
-                        hyps_len = len(hyps_index_map[0])
-                elif encoding_type.name == 'SWAP_FC':
-                    hyps_start_ind = len(ctx_index_list) + len(['[CLS]', '[SEP]']) + len(hyps_index_map[0])
-                    hyps_len = len(hyps_index_list) - len(hyps_index_map[0]) - len(hyps_index_map[hyps_index_list[-1]])
+                hyps_start_ind = len(ctx_index_list) + len(['[CLS]', '[SEP]'])
+                hyps_len = len(hyps_index_list)
                 self.hyps_start_len.append((hyps_start_ind, hyps_len))
 
                 def_start_ind = len(ctx_index_list) + len(hyps_index_list) + len(['[CLS]', '[SEP]', ';'])

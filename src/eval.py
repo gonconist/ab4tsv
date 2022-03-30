@@ -13,8 +13,8 @@ from ab4tsv import AB4TSV
 # Parse arguments
 parser = argparse.ArgumentParser()
 parser.add_argument("-d", "--dataset", type=str, default='dev')
-parser.add_argument("-a", "--analogy", nargs=4, metavar=('A', 'B', 'C', 'D'), default=('cls', 'cls', 'descr', 'descr'))
-parser.add_argument("-e", "--encoding", type=str2enum, nargs='?', default=WiCTSVDatasetEncodingOptions.SWAP_FC_PLUS)
+parser.add_argument("-a", "--analogy", nargs=4, metavar=('A', 'B', 'C', 'D'), default=('tgt', 'hyps', 'def', 'hyps'))
+parser.add_argument("-e", "--encoding", type=str2enum, nargs='?', default=WiCTSVDatasetEncodingOptions.SWAP_FC)
 parser.add_argument("-tfc", "--target_focus_char", type=str, default='$')
 parser.add_argument("-hfc1", "--hypernyms_focus_char_1", type=str, default='[H]')
 parser.add_argument("-hfc2", "--hypernyms_focus_char_2", type=str, default='[\H]')
@@ -35,9 +35,9 @@ else:
     device = torch.device("cpu")
 
 if args.permutation_invariance:
-    path = '{}/{}/ab4tsv/permutation/{}/'.format(args.output_dir, args.encoding.name, '_'.join(args.analogy))
+    path = '{}/{}/ab4tsv/permutation_invariance/{}/'.format(args.output_dir, args.encoding.name, '_'.join(args.analogy))
 else:
-    path = '{}/{}/ab4tsv/no_permutation/{}/'.format(args.output_dir, args.encoding.name, '_'.join(args.analogy))
+    path = '{}/{}/ab4tsv/no_permutation_invariance/{}/'.format(args.output_dir, args.encoding.name, '_'.join(args.analogy))
 
 if not os.path.exists(path):
     os.makedirs(path, exist_ok=True)
@@ -66,8 +66,7 @@ elif args.dataset == 'test':
     dataloader = WiCTSVDataLoader(test_ds, 'Test')
 
 # Load model
-# model = AB4TSV.from_pretrained(path, permutation_invariance=args.permutation_invariance)
-model = AB4TSV.from_pretrained('bert-base-uncased', permutation_invariance=args.permutation_invariance)
+model = AB4TSV.from_pretrained(path, permutation_invariance=args.permutation_invariance)
 
 if torch.cuda.is_available():
     model.cuda()

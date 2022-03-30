@@ -18,7 +18,7 @@ parser.add_argument("--seed", type=int, default=42)
 parser.add_argument("--num_epochs", type=int, default=5)
 parser.add_argument("--batch_size_train", type=int, default=16)
 parser.add_argument("--batch_size_val", type=int, default=8)
-parser.add_argument("-a", "--analogy", nargs=4, metavar=('A', 'B', 'C', 'D'), default=('def', 'ctx', 'cls', 'hyps'))
+parser.add_argument("-a", "--analogy", nargs=4, metavar=('A', 'B', 'C', 'D'), default=('tgt', 'hyps', 'def', 'hyps'))
 parser.add_argument("-e", "--encoding", type=str2enum, nargs='?', default=WiCTSVDatasetEncodingOptions.SWAP_FC)
 parser.add_argument("-tfc", "--target_focus_char", type=str, default='$')
 parser.add_argument("-hfc1", "--hypernyms_focus_char_1", type=str, default='$')
@@ -47,9 +47,9 @@ else:
     device = torch.device("cpu")
 
 if args.permutation_invariance:
-    path = '{}/{}/ab4tsv/permutation/{}/'.format(args.output_dir, args.encoding.name, '_'.join(args.analogy))
+    path = '{}/{}/ab4tsv/permutation_invariance/{}/'.format(args.output_dir, args.encoding.name, '_'.join(args.analogy))
 else:
-    path = '{}/{}/ab4tsv/no_permutation/{}/'.format(args.output_dir, args.encoding.name, '_'.join(args.analogy))
+    path = '{}/{}/ab4tsv/no_permutation_invariance/{}/'.format(args.output_dir, args.encoding.name, '_'.join(args.analogy))
 
 if not os.path.exists(path):
     os.makedirs(path, exist_ok=True)

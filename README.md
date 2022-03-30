@@ -13,7 +13,7 @@ pip install -r requirements.txt
 
 ## WiC-TSV data & baseline models
 
-The WiC-TSV dataset as well as training and evaluation scripts for HyperBertCLS and HyperBert3 are available [here](https://github.com/semantic-web-company/wic-tsv).
+The WiC-TSV dataset as well as training and evaluation scripts for HyperBertCLS and HyperBert3 are available [here](https://github.com/semantic-web-company/wic-tsv). Make sure to copy the contents of `wic-tsv/data/en` to `ab4tsv/data`.
 
 ## Training your own model
 

@@ -14,4 +14,4 @@ save_preds=True			            # --save_preds
 out_binary_preds=False		      #--out_binary_preds	
 output_dir=results            	# --output_dir
 
-python source/eval.py -a $A $B $C $D -d $dataset -e $encoding -pi $permutation_invariance
+python src/eval.py -a $A $B $C $D -d $dataset -e $encoding -pi $permutation_invariance

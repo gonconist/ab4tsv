@@ -6,8 +6,8 @@ C=def
 D=hyps
 encoding=swap_fc              # -e
 target_fc=$                   # -tfc
-hyps_start_em=$               # -hem1
-hyps_end_em=$                 # -hem2
+hyps_start_fc=$               # -hfc1
+hyps_end_fc=$                 # -hfc2
 permutation_invariance=False  # -pi
 
 seed=42                       # --seed

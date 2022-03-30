@@ -25,22 +25,22 @@ Initialize the training parameters inside `scripts/train.sh`.
 ```shell
 #!/bin/bash
 
-seed=42                         # --seed
-num_epochs=5                    # --num_epochs
-batch_size_train=16             # --batch_size_train
-batch_size_val=8                # --batch_size_val
-A=def
-B=ctx
-C=cls
+A=tgt
+B=hyps
+C=def
 D=hyps
-encoding=swap_fc_plus         	# -e
-target_fc=$                     # -tfc
-hyps_starting_fc=$              # -hfc1
-hyps_ending_fc=$                # -hfc2
-permutation_invariance=False    # -pi
-output_dir=results              # --output_dir
+encoding=swap_fc              # -e
+target_fc=$                   # -tfc
+hyps_start_fc=$               # -hfc1
+hyps_end_fc=$                 # -hfc2
+permutation_invariance=False  # -pi
+seed=42                       # --seed
+num_epochs=5                  # --num_epochs
+batch_size_train=16           # --batch_size_train
+batch_size_val=8              # --batch_size_val
+output_dir=results            # --output_dir
 
-python src/train.py -a $A $B $C $D -e $encoding -pi $permutation_invariance
+python source/train.py -a $A $B $C $D -e $encoding -pi $permutation_invariance
 ```
 Then simply run the following command:
 ```shell
@@ -51,8 +51,8 @@ bash ./scripts/train.sh
 Alternatively, pass the arguments of interest directly to `src/train.py`:
 ```shell
 python src/train.py \
-    --analogy def ctx cls hyps \
-    --encoding swap_fc_plus \
+    --analogy tgt hyps def hyps \
+    --encoding swap_fc \
     --permutation_invariance False
 ```
 
@@ -67,21 +67,21 @@ Initialize the training parameters inside `scripts/eval.sh`.
 ```shell
 #!/bin/bash
 
-A=cls
-B=cls
-C=descr				
-D=descr
+A=tgt
+B=hyps
+C=def
+D=hyps
 dataset=dev                     # -d
-encoding=swap_fc_plus           # -e
-target_fc=$                     # -tfc
-hyps_starting_fc=$              # -hfc1
+encoding=swap_fc               	# -e
+target_fc=$                   	# -tfc
+hyps_starting_fc=$            	# -hfc1
 hyps_ending_fc=$              	# -hfc2
-permutation_invariance=False    # -pi
-save_preds=True                 # --save_preds
-out_binary_preds=False          # --out_binary_preds	
-output_dir=results              # --output_dir
+permutation_invariance=False	# -pi
+save_preds=True			        # --save_preds
+out_binary_preds=False		    #--out_binary_preds	
+output_dir=results            	# --output_dir
 
-python src/eval.py -a $A $B $C $D -d $dataset-e $encoding -pi $permutation_invariance --save_preds $save_preds --out_binary_preds $out_binary_preds
+python src/eval.py -a $A $B $C $D -d $dataset -e $encoding -pi $permutation_invariance
 ```
 Then simply run the following command:
 ```shell
@@ -92,8 +92,8 @@ bash ./scripts/eval.sh
 Alternatively, pass the arguments of interest directly to `src/eval.py`:
 ```shell
 python src/eval.py \
-    --analogy def ctx cls hyps \
-    --encoding swap_fc_plus \
+    --analogy tgt hyps def hyps \
+    --encoding swap_fc \
     --permutation_invariance False
     --save_preds True
 ```

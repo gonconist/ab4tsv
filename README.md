@@ -40,7 +40,7 @@ batch_size_train=16           # --batch_size_train
 batch_size_val=8              # --batch_size_val
 output_dir=results            # --output_dir
 
-python source/train.py -a $A $B $C $D -e $encoding -pi $permutation_invariance
+python src/train.py -a $A $B $C $D -e $encoding -pi $permutation_invariance
 ```
 Then simply run the following command:
 ```shell

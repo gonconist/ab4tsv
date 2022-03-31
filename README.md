@@ -97,3 +97,11 @@ python src/eval.py \
     --permutation_invariance False
     --save_preds True
 ```
+
+## Reproducing the experiments
+
+To reproduce the experimental results of the analogical proportions optimization, you need to train AB4TSV 4 times (we use 42, 100, 142, 200 as seeds) for each encoding and each relation included in `all_relations.txt`.
+
+![alt text](https://github.com/gonconist/ab4tsv/blob/main/encodings.png)
+
+
